@@ -1,0 +1,35 @@
+# Drone parameters
+drone:
+  fleet_size: 8
+  speed_kmh: 50
+  battery_drain: 1.5      # percent per km
+  battery_min: 30         # percent threshold
+  recharge_rate: 20       # percent per minute
+  max_payload: 4          # blood units
+
+# Timing parameters
+timing:
+  service_time_min: 3     # minutes at hospital
+  loading_time_min: 2     # minutes at blood bank
+  dispatch_cycle_s: 30    # seconds between dispatch checks
+  expiration_min: 15      # minutes until request expires
+  horizon_hours: 24
+
+# Experiment parameters
+experiment:
+  n_replications: 20
+  use_crn: true           # Common Random Numbers
+  base_seed: 42
+
+# Inventory parameters
+inventory:
+  initial_per_bank_per_type: 50
+  blood_types: [O_neg, O_pos, A_pos, B_pos]
+  blood_type_probs: [0.10, 0.40, 0.35, 0.15]
+
+# Request parameters
+requests:
+  priority_classes: [NORMAL, URGENT, EMERGENCY]
+  priority_probs: [0.50, 0.35, 0.15]
+  units_min: 1
+  units_max: 4

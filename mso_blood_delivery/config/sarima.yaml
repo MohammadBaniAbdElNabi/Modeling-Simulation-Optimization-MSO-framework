@@ -1,0 +1,61 @@
+# SARIMA grid search candidate spaces
+model:
+  p_range: [0, 1, 2]     # non-seasonal AR order
+  d_range: [0, 1]         # integration order
+  q_range: [0, 1, 2]     # non-seasonal MA order
+  P_range: [0, 1]         # seasonal AR order
+  D_range: [0, 1]         # seasonal differencing
+  Q_range: [0, 1]         # seasonal MA order
+  s: 24                   # seasonal period (hourly within-day cycle)
+
+# AIC selection
+selection:
+  criterion: AIC
+  min_convergence_fraction: 0.833   # at least 10/12 hospitals must converge
+
+# Stationarity thresholds
+stationarity:
+  adf_alpha: 0.05         # reject unit root if p-value < alpha
+  acf_lag24_threshold: 0.3  # if |ACF at lag 24| > threshold, recommend D=1
+
+# Forecast settings
+forecast:
+  steps: 24
+  lambda_hat_min: 0.10    # clip floor
+
+# Data generation parameters (used in Stage M notebook)
+data_gen:
+  H: 12
+  T: 24
+  D_train: 6
+  D_test: 1
+  noise_std: 0.15
+  scale_low: 0.6
+  scale_high: 1.4
+  lambda_floor: 0.10
+  seed: 42
+  base_lambda:
+    - 0.3   # hour 0
+    - 0.3   # hour 1
+    - 0.3   # hour 2
+    - 0.3   # hour 3
+    - 0.3   # hour 4
+    - 0.3   # hour 5
+    - 0.8   # hour 6
+    - 1.2   # hour 7
+    - 1.5   # hour 8
+    - 1.4   # hour 9
+    - 1.3   # hour 10
+    - 1.6   # hour 11
+    - 1.8   # hour 12
+    - 2.0   # hour 13
+    - 1.9   # hour 14
+    - 1.7   # hour 15
+    - 1.5   # hour 16
+    - 1.4   # hour 17
+    - 1.2   # hour 18
+    - 1.0   # hour 19
+    - 0.8   # hour 20
+    - 0.6   # hour 21
+    - 0.5   # hour 22
+    - 0.4   # hour 23

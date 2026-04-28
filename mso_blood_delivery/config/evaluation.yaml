@@ -1,0 +1,36 @@
+# Evaluation framework settings
+metrics:
+  primary:
+    - FR     # Fulfillment rate (%)
+    - ADT    # Average delivery time (min)
+    - P95    # 95th percentile delivery time (min)
+    - ERR    # Expired request rate (%)
+    - AWT    # Average wait time (min)
+  secondary:
+    - deliveries_per_hour
+
+# Statistical settings
+statistics:
+  alpha: 0.05             # significance level
+  ci_level: 0.95          # confidence interval level
+  n_replications: 20
+  df: 19                  # degrees of freedom = n_replications - 1
+  t_crit_df19: 2.093      # t.ppf(0.975, df=19)
+
+# Pairwise comparison pairs
+comparisons:
+  - [lp, greedy]
+  - [lp, random]
+  - [greedy, random]
+
+# Cohen's d effect size thresholds
+effect_size:
+  negligible: 0.2
+  small: 0.5
+  medium: 0.8
+
+# Output settings
+output:
+  summary_stats: data/results/summary_stats.csv
+  pairwise_tests: data/results/pairwise_tests.csv
+  figures_dir: data/results/figures
