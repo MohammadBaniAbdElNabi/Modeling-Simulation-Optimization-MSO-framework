@@ -1,0 +1,46 @@
+# Drone parameters
+drone:
+  fleet_size: 8
+  speed_kmh: 50
+  battery_drain: 1.5      # percent per km
+  battery_min: 30         # percent threshold
+  recharge_rate: 20       # percent per minute
+  max_payload: 4          # blood units
+
+# Timing parameters
+timing:
+  service_time_min: 3     # minutes at hospital
+  loading_time_min: 2     # minutes at blood bank
+  dispatch_cycle_s: 30    # seconds between dispatch checks
+  expiration_min: 15      # minutes until request expires
+  horizon_hours: 24
+
+# Experiment parameters
+experiment:
+  n_replications: 20
+  use_crn: true           # Common Random Numbers
+  base_seed: 42
+
+# Inventory parameters
+inventory:
+  initial_per_bank_per_type: 50
+  blood_types: [O_neg, O_pos, A_pos, B_pos]
+  blood_type_probs: [0.10, 0.40, 0.35, 0.15]
+
+# Inventory replenishment (R3 realism: lifts the saturation ceiling).
+# 3 deliveries/day × 12 units × 4 types × 3 banks = 432 extra units/day.
+# That increases the inventory ceiling from ~240 to ~412 deliveries vs ~340
+# expected demand at baseline — leaves the system mildly stressed at peak,
+# which is exactly where MPC's quantile hedging should win.
+replenishment:
+  enabled: true
+  schedule_hours: [6, 12, 18]
+  amount_per_type: 12
+  delay_stdev_min: 20   # Gaussian jitter (σ=20 min) — MPC observes actual timing and replans
+
+# Request parameters
+requests:
+  priority_classes: [NORMAL, URGENT, EMERGENCY]
+  priority_probs: [0.50, 0.35, 0.15]
+  units_min: 1
+  units_max: 4

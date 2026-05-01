@@ -1,0 +1,55 @@
+# Evaluation framework — R3: significance-focused
+metrics:
+  primary:
+    - FR_weighted     # priority-weighted FR  (HEADLINE)
+    - ERR_peak        # peak-hour ERR        (HEADLINE)
+    - Expiration_cost # priority-weighted    (HEADLINE)
+    - FR              # aggregate (legacy comparability)
+    - ERR             # aggregate (legacy comparability)
+    - ADT
+    - AWT
+    - P95
+  headline:
+    - FR_weighted
+    - ERR_peak
+    - Expiration_cost
+
+statistics:
+  alpha: 0.05
+  power: 0.80
+  ci_level: 0.95
+  n_replications: 50
+
+# R3 conditions (planning-sophistication framing)
+conditions:
+  - random
+  - greedy
+  - lp_static
+  - lp_mpc
+
+# Pre-registered primary pairs
+primary_pairs:
+  - [greedy,    random]
+  - [lp_static, greedy]
+  - [lp_mpc,    lp_static]
+  - [lp_mpc,    greedy]
+
+reference_pairs:
+  - [lp_mpc,    random]
+  - [lp_static, random]
+
+# Stress-sweep
+demand_scales: [0.7, 1.0, 1.3]
+
+# Cohen's d effect size thresholds
+effect_size:
+  negligible: 0.2
+  small: 0.5
+  medium: 0.8
+
+# Output paths
+output:
+  summary_stats:    data/results/summary_stats.csv
+  pairwise_tests:   data/results/pairwise_tests.csv
+  operating_curve:  data/results/operating_curve.csv
+  figures_dir:      data/results/figures

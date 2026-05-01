@@ -1,0 +1,53 @@
+# Experiment-level configuration (R3: planning-sophistication study with stress sweep)
+experiment:
+  name: r3_planning_sophistication
+  n_replications: 50
+  base_seed: 1
+  use_crn: true
+
+  # Demand-stress levels (× baseline lambda)
+  demand_scales: [0.7, 1.0, 1.3]
+  baseline_demand_scale: 1.0
+
+  # Conditions (all LP arms use Factor forecast — best-available point estimator)
+  conditions:
+    - id: random
+      label: 'Random'
+      demand_model: null
+      policy: random
+      role: reference
+    - id: greedy
+      label: 'Greedy'
+      demand_model: null
+      policy: greedy
+      role: reference
+    - id: lp_static
+      label: 'Static-LP'
+      demand_model: factor
+      policy: lp_static
+      role: primary
+    - id: lp_mpc
+      label: 'MPC-LP'
+      demand_model: factor
+      policy: lp_mpc
+      role: primary
+
+  # Statistical analysis
+  stats:
+    alpha: 0.05
+    power: 0.80
+    primary_pairs:
+      - [greedy,    random]
+      - [lp_static, greedy]
+      - [lp_mpc,    lp_static]
+      - [lp_mpc,    greedy]
+    reference_pairs:
+      - [lp_mpc,    random]
+      - [lp_static, random]
+    multiple_comparison: holm
+
+# Rolling-horizon LP (MPC) parameters
+mpc:
+  horizon_hours:        12     # plan ahead 12 hours (sees the peak band 12–17 from t=0)
+  replan_interval_hours: 1.0   # re-solve every hour with current state
+  demand_quantile:      0.65   # moderate hedge — 0.80 over-depletes inventory mid-day
